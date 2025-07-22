@@ -1,98 +1,107 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SNSIssue 클론</title>
-
-  <!-- Google AdSense 예시 스크립트 -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-          crossorigin="anonymous"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>판베스트</title>
   <style>
-    /* --- Reset & Base --- */
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family: 'Noto Sans KR', sans-serif; line-height:1.6; color:#333; }
-    a { color:#333; text-decoration:none; }
-    .container { max-width:800px; margin:0 auto; padding:1rem; }
-
-    /* --- Header --- */
-    header { text-align:center; padding:2rem 0; }
-    header h1 { font-size:2rem; }
-
-    /* --- 광고 영역 --- */
-    .ad-slot { margin:2rem 0; text-align:center; }
-
-    /* --- 게시글 리스트 --- */
-    ul.posts { list-style:none; }
-    ul.posts li { border-bottom:1px solid #eee; padding:1.5rem 0; }
-    ul.posts li a.title { font-size:1.25rem; font-weight:500; display:block; margin-bottom:.5rem; }
-    ul.posts li .meta { font-size:.9rem; color:#666; }
-
-    /* --- 페이징 --- */
-    nav.pagination { display:flex; flex-wrap:wrap; justify-content:center; margin:3rem 0; }
-    nav.pagination a,
-    nav.pagination span { margin:.25rem; padding:.5rem .75rem; border:1px solid #ddd; }
-    nav.pagination a { color:#333; }
-    nav.pagination span.current { background:#333; color:#fff; border-color:#333; }
-    nav.pagination a:hover { background:#f5f5f5; }
-
-    /* --- 모바일 대응 --- */
-    @media(max-width:600px) {
-      .container { padding:.75rem; }
-      header h1 { font-size:1.5rem; }
-      ul.posts li a.title { font-size:1rem; }
-      nav.pagination a,
-      nav.pagination span { padding:.4rem .6rem; font-size:.9rem; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      text-align: center;
+      padding: 20px 0;
+      background-color: #fff;
+    }
+    .logo {
+      color: #FF0000;
+      font-size: 2rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    }
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .post {
+      display: none;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+    }
+    .post.active {
+      display: block;
+    }
+    #pagination {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .page-num {
+      display: inline-block;
+      cursor: pointer;
+      padding: 5px 10px;
+      margin: 0 3px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+    .page-num.active {
+      background-color: #eee;
+      font-weight: bold;
     }
   </style>
 </head>
-
 <body>
-  <div class="container">
-
-    <!-- 헤더 -->
-    <header>
-      <h1>SNSIssue 클론</h1>
-    </header>
-
-    <!-- 광고 삽입 예시 -->
-    <div class="ad-slot">
-      <ins class="adsbygoogle"
-           style="display:block;"
-           data-ad-client="ca-pub-XXXXXXXXXXXX"
-           data-ad-slot="YYYYYYYYYY"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-      <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
+  <header>
+    <h1 class="logo">판베스트 &lt;&lt;</h1>
+  </header>
+  <main>
+    <div id="posts">
+      <!-- 예시 글: 추가 시 .post 블록을 복사해서 붙여넣으세요 -->
+      <article class="post">
+        <h2>첫 번째 글 제목</h2>
+        <p>내용…</p>
+      </article>
+      <article class="post">
+        <h2>두 번째 글 제목</h2>
+        <p>내용…</p>
+      </article>
     </div>
+    <div id="pagination"></div>
+  </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const posts = Array.from(document.querySelectorAll('.post'));
+      const postsPerPage = 5;
+      const pageCount = Math.ceil(posts.length / postsPerPage);
+      const pagination = document.getElementById('pagination');
 
-    <!-- 게시글 리스트 -->
-    <ul class="posts">
-      <li>
-        <a href="/posts/first-post.html" class="title">첫 번째 게시물 제목</a>
-        <div class="meta">2025-07-22 • 카테고리</div>
-      </li>
-      <li>
-        <a href="/posts/second-post.html" class="title">두 번째 게시물 제목</a>
-        <div class="meta">2025-07-21 • 카테고리</div>
-      </li>
-      <!-- … 동일한 형식으로 계속 추가 … -->
-    </ul>
+      function showPage(page) {
+        const start = (page - 1) * postsPerPage;
+        const end = start + postsPerPage;
+        posts.forEach((post, i) => {
+          post.classList.toggle('active', i >= start && i < end);
+        });
+        Array.from(pagination.children).forEach(btn => {
+          btn.classList.toggle('active', Number(btn.textContent) === page);
+        });
+      }
 
-    <!-- 페이지네이션 -->
-    <nav class="pagination">
-      <a href="/page/3">&laquo; 이전</a>
-      <a href="/page/1">1</a>
-      <a href="/page/2">2</a>
-      <a href="/page/3">3</a>
-      <span class="current">4</span>
-      <a href="/page/5">5</a>
-      <a href="/page/5">다음 &raquo;</a>
-    </nav>
+      // 페이지 버튼 생성
+      for (let i = 1; i <= pageCount; i++) {
+        const btn = document.createElement('span');
+        btn.textContent = i;
+        btn.className = 'page-num';
+        btn.addEventListener('click', () => showPage(i));
+        pagination.appendChild(btn);
+      }
 
-  </div>
+      // 첫 페이지 표시
+      if (pageCount > 0) showPage(1);
+    });
+  </script>
 </body>
 </html>
